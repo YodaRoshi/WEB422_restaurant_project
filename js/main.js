@@ -9,21 +9,21 @@
  *
  ********************************************************************************/
 
-//an empty array
+// An empty array that will hold restaurant data
 let restaurantData = [];
 
-// hold a restaurant data  shown on ,ap
+// Holds a restaurant data
 let currentRestaurant = {};
 
 // Current page number
 let page = 1;
 
-// the number of items shown per page
+// The number of items shown per page
 const perPage = 10;
 
 // Leaflet "map" object)
 let map = null;
-//  calicurates average grade
+// Calicurates average grade
 let avg = (grades) => {
     let newArray = grades.map((grade) => {
         return grade.score;
@@ -31,7 +31,7 @@ let avg = (grades) => {
     return newArray.reduce((a, b) => a + b) / newArray.length;
 };
 
-// table row template
+// Table row template
 const tableRows = _.template(
     `<% _.forEach(restaurantData, function(restaurants) { %>
         <tr data-id=<%- restaurants._id %>>
@@ -44,7 +44,7 @@ const tableRows = _.template(
     <% }); %>`
 );
 
-// populates the table
+// Populates the table
 function loadRestaurantData() {
     fetch(
         //GET
@@ -60,11 +60,11 @@ function loadRestaurantData() {
             $("#current-page").html(page);
         });
 }
-// the following code is executed when the document is ready
+// Executed when the document is ready
 $(function () {
     loadRestaurantData();
 });
-// Click event for all tr elements within the tbody of the restaurant-table
+// Executed when a particular restaurant is clicked, pulling more details out of restaurantData
 $("#restaurant-table").on("click", "tr", function (e) {
     let thisId = $(this).attr("data-id"); // obtain the "data-id" value
     currentRestaurant = new Object(
@@ -92,7 +92,7 @@ $("#next-page").on("click", function (e) {
     page++;
     loadRestaurantData();
 });
-// display the selected restaurant location on Map
+// Excuted when modal is ready displaying the selected restaurantlocation on Map
 $("#restaurant-modal").on("shown.bs.modal", function () {
     map = new L.Map("leaflet", {
         center: [
@@ -111,7 +111,7 @@ $("#restaurant-modal").on("shown.bs.modal", function () {
         currentRestaurant.address.coord[0],
     ]).addTo(map);
 });
-// reset the map object for the next cycle
+// Excuted when the modal is closed reseting the map object for the next cycle
 $("#restaurant-modal").on("hidden.bs.modal", function () {
     map = map.remove();
 });
